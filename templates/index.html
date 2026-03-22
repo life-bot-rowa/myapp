@@ -10,9 +10,7 @@
             align-items: center;
             padding-top: 100px;
         }
-        h1 {
-            margin-bottom: 20px;
-        }
+        h1 { margin-bottom: 20px; }
         input {
             padding: 10px;
             font-size: 16px;
@@ -23,37 +21,10 @@
             font-size: 16px;
             margin-left: 10px;
             cursor: pointer;
-        }
-        p {
-            margin-top: 40px;
-            font-size: 22px;
-            max-width
-cat > templates/index.html << 'ENDOFFILE'
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 100px;
-        }
-        h1 {
-            margin-bottom: 20px;
-        }
-        input {
-            padding: 10px;
-            font-size: 16px;
-            width: 250px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            margin-left: 10px;
-            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
         }
         p {
             margin-top: 40px;
@@ -61,16 +32,35 @@ cat > templates/index.html << 'ENDOFFILE'
             max-width: 600px;
             text-align: center;
         }
+        .spinner {
+            display: none;
+            margin-top: 40px;
+            width: 48px;
+            height: 48px;
+            border: 5px solid #ddd;
+            border-top-color: #007bff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
     <h1>Расшифровка имени</h1>
-    <form method="POST">
+    <form method="POST" onsubmit="showSpinner()">
         <input type="text" name="name" placeholder="Введи имя">
-        <button type="submit">Отправить</button>
+        <button type="submit">Проверить</button>
     </form>
+    <div class="spinner" id="spinner"></div>
     {% if greeting %}
         <p>{{ greeting }}</p>
     {% endif %}
+    <script>
+        function showSpinner() {
+            document.getElementById('spinner').style.display = 'block';
+        }
+    </script>
 </body>
 </html>
