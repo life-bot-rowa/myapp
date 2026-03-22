@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from flask import Flask, render_template, request
 from openai import OpenAI
 
@@ -15,6 +16,7 @@ def index():
         month = request.form["month"]
         year = request.form["year"]
         birthdate = f"{day} {month} {year}"
+        today = datetime.now().strftime("%d %B %Y")
 
         r1 = client.chat.completions.create(
             model="gpt-4o-mini",
@@ -24,7 +26,7 @@ def index():
 
         r2 = client.chat.completions.create(
             model="gpt-4o-mini",
-            messages=[{"role": "user", "content": f"Человека зовут {name}, дата рождения {birthdate}. Что его ожидает в ближайший месяц? Нумерология и астрология. Кратко, 3-4 предложения."}]
+            messages=[{"role": "user", "content": f"Сегодня {today}. Человека зовут {name}, дата рождения {birthdate}. Что его ожидает в ближайший месяц начиная с сегодняшней даты? Нумерология и астрология. Кратко, 3-4 предложения."}]
         )
         future_result = r2.choices[0].message.content
 
