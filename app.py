@@ -7,15 +7,28 @@ client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    answer = None
+    name_result = None
+    future_result = None
     if request.method == "POST":
         name = request.form["name"]
-        response = client.chat.completions.create(
+        day = request.form["day"]
+        month = request.form["month"]
+        year = request.form["year"]
+        birthdate = f"{day} {month} {year}"
+
+        r1 = client.chat.completions.create(
             model="gpt-4o-mini",
-            messages=[{"role": "user", "content": f"Привет! Меня зовут {name}. Скажи мне что-нибудь интересное про моё имя."}]
+            messages=[{"role": "user", "content": f"Дай нумерологическую характеристику имени {name}. Кратко, 3-4 предложения."}]
         )
-        answer = response.choices[0].message.content
-    return render_template("index.html", greeting=answer)
+        name_result = r1.choices[0].message.content
+
+        r2 = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": f"Человека зовут {name}, дата рождения {birthdate}. Что его ожидает в ближайший месяц? Нумерология и астрология. Кратко, 3-4 предложения."}]
+        )
+        future_result = r2.choices[0].message.content
+
+    return render_template("index.html", name_result=name_result, future_result=future_result)
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))

@@ -8,29 +8,47 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-top: 100px;
+            padding-top: 60px;
         }
-        h1 { margin-bottom: 20px; }
+        h1 { margin-bottom: 30px; }
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            width: 320px;
+        }
+        label {
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #555;
+        }
         input {
             padding: 10px;
             font-size: 16px;
-            width: 250px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .date-row {
+            display: flex;
+            gap: 10px;
+        }
+        select {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            flex: 1;
         }
         button {
-            padding: 10px 20px;
+            margin-top: 10px;
+            padding: 12px 30px;
             font-size: 16px;
-            margin-left: 10px;
             cursor: pointer;
             background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
-        }
-        p {
-            margin-top: 40px;
-            font-size: 22px;
-            max-width: 600px;
-            text-align: center;
+            width: 320px;
         }
         .spinner {
             display: none;
@@ -42,25 +60,72 @@
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .result-box {
+            margin-top: 30px;
+            max-width: 600px;
+            text-align: center;
+        }
+        .result-box h2 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .result-box p {
+            font-size: 18px;
+            color: #222;
+            line-height: 1.6;
         }
     </style>
 </head>
 <body>
     <h1>Расшифровка имени</h1>
-    <form method="POST" onsubmit="showSpinner()">
-        <input type="text" name="name" placeholder="Введи имя">
+    <form method="POST" onsubmit="document.getElementById('spinner').style.display='block'">
+        <div class="form-group">
+            <label>Имя</label>
+            <input type="text" name="name" placeholder="Введи имя" required>
+        </div>
+        <div class="form-group">
+            <label>Дата рождения</label>
+            <div class="date-row">
+                <select name="day">
+                    {% for d in range(1, 32) %}
+                    <option value="{{ d }}">{{ d }}</option>
+                    {% endfor %}
+                </select>
+                <select name="month">
+                    <option value="января">Январь</option>
+                    <option value="февраля">Февраль</option>
+                    <option value="марта">Март</option>
+                    <option value="апреля">Апрель</option>
+                    <option value="мая">Май</option>
+                    <option value="июня">Июнь</option>
+                    <option value="июля">Июль</option>
+                    <option value="августа">Август</option>
+                    <option value="сентября">Сентябрь</option>
+                    <option value="октября">Октябрь</option>
+                    <option value="ноября">Ноябрь</option>
+                    <option value="декабря">Декабрь</option>
+                </select>
+                <select name="year">
+                    {% for y in range(2010, 1919, -1) %}
+                    <option value="{{ y }}">{{ y }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
         <button type="submit">Проверить</button>
     </form>
     <div class="spinner" id="spinner"></div>
-    {% if greeting %}
-        <p>{{ greeting }}</p>
+    {% if name_result %}
+        <div class="result-box">
+            <h2>Характеристика имени</h2>
+            <p>{{ name_result }}</p>
+        </div>
+        <div class="result-box">
+            <h2>Что вас ожидает в ближайший месяц</h2>
+            <p>{{ future_result }}</p>
+        </div>
     {% endif %}
-    <script>
-        function showSpinner() {
-            document.getElementById('spinner').style.display = 'block';
-        }
-    </script>
 </body>
 </html>
